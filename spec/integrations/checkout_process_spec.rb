@@ -15,6 +15,7 @@ RSpec.describe 'Checkout process' do
   let(:pricing_rule_repository) { PricingRuleHashRepository.new }
   let(:product_repository) { ProductHashRepository.new }
   let(:checkout_service) { CheckoutService.new(pricing_rule_repository, product_repository) }
+  let(:basket) { Basket.new }
 
   before do
     pricing_rule_repository.create(AbsolutePricingRule.new('SR1', 3, Money.from_cents(450, 'GBP')))
@@ -27,7 +28,6 @@ RSpec.describe 'Checkout process' do
   end
 
   it 'calculates the total price correctly for a basket with GR1, SR1, GR1, GR1, CF1 products' do
-    basket = Basket.new
     basket.add_item('GR1')
     basket.add_item('SR1')
     basket.add_item('GR1')
@@ -37,14 +37,12 @@ RSpec.describe 'Checkout process' do
   end
 
   it 'calculates the total price correctly for a basket with GR1, GR1 products' do
-    basket = Basket.new
     basket.add_item('GR1')
     basket.add_item('GR1')
     expect(checkout_service.checkout(basket)).to eq(Money.from_cents(311, 'GBP'))
   end
 
   it 'calculates the total price correctly for a basket with SR1, SR1, GR1, SR1 products' do
-    basket = Basket.new
     basket.add_item('SR1')
     basket.add_item('SR1')
     basket.add_item('GR1')
@@ -53,7 +51,6 @@ RSpec.describe 'Checkout process' do
   end
 
   it 'calculates the total price correctly for a basket with GR1, CF1, SR1, CF1, CF1 products' do
-    basket = Basket.new
     basket.add_item('GR1')
     basket.add_item('CF1')
     basket.add_item('SR1')
@@ -63,7 +60,6 @@ RSpec.describe 'Checkout process' do
   end
 
   it 'raises an error if the basket is empty' do
-    basket = Basket.new
     expect do
       checkout_service.checkout(basket)
     end.to raise_error(ValidationError,
