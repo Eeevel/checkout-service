@@ -9,3 +9,13 @@ This application has implemented a checkout function. The application allows you
 5. On an object of the CheckoutService class, call the checkout method with a filled basket
 
 After this you will receive the final price
+
+### How to run the application
+Use ruby version from Gemfile and run:
+
+`ruby main.rb`
+
+### How to run tests
+Use ruby version from Gemfile and run:
+
+`rspec`
